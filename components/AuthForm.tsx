@@ -13,10 +13,11 @@ import SignIn from '@/app/(auth)/sign-in/page'
 import { signIn, signUp } from "@/lib/actions/user.actions"
 import Link from "next/link"
 import Image from "next/image"
+import PlaidLink from "./PlaidLink"
 
 
 const AuthForm = ({ type }: { type: string }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
@@ -38,7 +39,7 @@ const AuthForm = ({ type }: { type: string }) => {
                 const userData = {
                     firstName: data.firstName!,
                     lastName: data.lastName!,
-                    address: data.address1!,
+                    address1: data.address1!,
                     city: data.city!,
                     state: data.state!,
                     postalCode: data.postalCode!,
@@ -47,12 +48,12 @@ const AuthForm = ({ type }: { type: string }) => {
                     email: data.email,
                     password: data.password
                 }
-                console.log(userData);
+
                 const newUser = await signUp(userData);
                 setUser(newUser);
             }
             // signin
-            console.log(type);
+
 
             if (type === 'sign-in') {
                 const response = await signIn({
@@ -104,8 +105,9 @@ const AuthForm = ({ type }: { type: string }) => {
 
             {user ? (
                 <div className='flex flex-col gap-4'>
-
-                </div>) : (
+                    <PlaidLink user={user!} variant='primary' />
+                </div>
+            ) : (
                 <>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
